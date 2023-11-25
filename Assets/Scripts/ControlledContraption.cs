@@ -28,7 +28,7 @@ public class ControlledContraption : MonoBehaviour
     private bool IsGrounded()
     {
         return true;
-
+        
         float extraDistance = 0.1f;
         Vector3 boxPosition = transform.position + groundCheckOffset;
         RaycastHit2D hit = Physics2D.BoxCast(boxPosition, groundCheckSize, 0f, Vector2.down, groundCheckSize.y / 2 + extraDistance, groundLayer);
@@ -38,7 +38,7 @@ public class ControlledContraption : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.cyan;
         float extraDistance = 0.1f;
         Vector3 boxPosition = transform.position + groundCheckOffset;
         float totalDistance = groundCheckSize.y / 2 + extraDistance;
