@@ -6,11 +6,12 @@ using UnityEngine.Events;
 public class ControlledContraption : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
-    [SerializeField] float jumpForce = 10f;
+    [SerializeField] float jumpForcePerMass = 10f;
+    float JumpForce => jumpForcePerMass * _rigidbody2D.mass;
     [SerializeField] LayerMask groundLayer;
     
-    float width = 1f;
-    float height = 1f;
+    float width;
+    float height;
     float halfHeight;
     [SerializeField] float groundCheckExtraDistance = 0.125f;
     
@@ -22,6 +23,8 @@ public class ControlledContraption : MonoBehaviour
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         
+        width = transform.localScale.x;
+        height = transform.localScale.y;
         halfHeight = height / 2;
     }
 
@@ -91,7 +94,7 @@ public class ControlledContraption : MonoBehaviour
 
     private void Jump()
     {
-        Vector2 force = new Vector2(0, jumpForce);
+        Vector2 force = new Vector2(0, JumpForce);
         _rigidbody2D.AddForce(force, ForceMode2D.Impulse);
     }
 }
