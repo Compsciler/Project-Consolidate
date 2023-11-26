@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1913167552334730928}
   - component: {fileID: 1292860720041711445}
   - component: {fileID: 1279992508047318972}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: ControlledContraption
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,10 +172,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  jumpForce: 74.34
+  jumpForce: 12
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
-  groundCheckSize: {x: 0.8, y: 0.1}
-  groundCheckOffset: {x: 0, y: 0, z: 0}
+    m_Bits: 1
+  groundCheckExtraDistance: 0.125
   _isGrounded: 1
