@@ -5,18 +5,24 @@ using UnityEngine.Events;
 
 public class ControlledContraption : MonoBehaviour
 {
-    [SerializeField] private float moveSpeed = 5f;
-    [SerializeField] private float jumpForce = 10f;
-    [SerializeField] private LayerMask groundLayer;
-    [SerializeField] private Vector2 groundCheckSize = new Vector2(0.8f, 0.1f);
-    [SerializeField] private Vector3 groundCheckOffset;
-
-    private Rigidbody2D _rigidbody2D;
+    [SerializeField] float moveSpeed = 5f;
+    [SerializeField] float jumpForce = 10f;
+    [SerializeField] LayerMask groundLayer;
+    
+    float width = 1f;
+    float height = 1f;
+    float halfHeight;
+    [SerializeField] float groundCheckExtraDistance = 0.125f;
+    
+    Rigidbody2D _rigidbody2D;
     [SerializeField] bool _isGrounded;
-
-    private void Start()
+    
+    
+    private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
+        
+        halfHeight = height / 2;
     }
 
     private void Update()
@@ -25,28 +31,32 @@ public class ControlledContraption : MonoBehaviour
         HandleInput();
     }
 
+    private (Vector2 groundCheckPosition, Vector2 groundCheckBoxSize, float groundCheckDistance) CalculateGroundCheckParameters()
+    {
+        Vector2 groundCheckPosition = transform.position;
+        Vector2 groundCheckBoxSize = new Vector2(1f, groundCheckExtraDistance);
+        float groundCheckDistance = halfHeight;
+
+        return (groundCheckPosition, groundCheckBoxSize, groundCheckDistance);
+    }
+
     private bool IsGrounded()
     {
-        return true;
-        
-        float extraDistance = 0.1f;
-        Vector3 boxPosition = transform.position + groundCheckOffset;
-        RaycastHit2D hit = Physics2D.BoxCast(boxPosition, groundCheckSize, 0f, Vector2.down, groundCheckSize.y / 2 + extraDistance, groundLayer);
+        var (groundCheckPosition, groundCheckBoxSize, groundCheckDistance) = CalculateGroundCheckParameters();
 
-        return hit.collider != null;  // This always returns false somehow
+        RaycastHit2D hit = Physics2D.BoxCast(groundCheckPosition, groundCheckBoxSize, 0f, Vector2.down, groundCheckDistance, groundLayer);
+        return hit.collider != null;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.cyan;
-        float extraDistance = 0.1f;
-        Vector3 boxPosition = transform.position + groundCheckOffset;
-        float totalDistance = groundCheckSize.y / 2 + extraDistance;
-        Vector3 endBoxPosition = boxPosition + Vector3.down * totalDistance;
+        var (groundCheckPosition, groundCheckBoxSize, groundCheckDistance) = CalculateGroundCheckParameters();
 
-        Gizmos.DrawWireCube(boxPosition, groundCheckSize);
-        Gizmos.DrawWireCube(endBoxPosition, groundCheckSize);
+        Gizmos.color = Color.cyan;
+        Vector2 bottomCenter = groundCheckPosition + Vector2.down * (groundCheckBoxSize.y / 2 + groundCheckDistance);
+        Gizmos.DrawWireCube(bottomCenter, new Vector3(groundCheckBoxSize.x, groundCheckBoxSize.y, 0));
     }
+    
 
     private void FixedUpdate()
     {
