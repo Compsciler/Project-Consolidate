@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class ControlledContraption : MonoBehaviour
 {
@@ -68,6 +69,11 @@ public class ControlledContraption : MonoBehaviour
 
     private void HandleInput()
     {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Restart();
+        }
+        
         float horizontalInput = Input.GetAxis("Player1_Horizontal");
 
         if (Input.GetButtonDown("Player1_Jump") && _isGrounded)
@@ -96,5 +102,10 @@ public class ControlledContraption : MonoBehaviour
     {
         Vector2 force = new Vector2(0, JumpForce);
         _rigidbody2D.AddForce(force, ForceMode2D.Impulse);
+    }
+
+    private void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
